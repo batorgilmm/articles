@@ -1,17 +1,17 @@
-import fetch from 'node-fetch';
-import LinkPreview from "@/components/LinkPreview";
+// import fetch from 'node-fetch';
+// import LinkPreview from "@/components/LinkPreview";
 
 
-type ArticleType = {
-  _id: string
-  url: string
-  createdAt: string
-  updatedAt: string
-}
+// type ArticleType = {
+//   _id: string
+//   url: string
+//   createdAt: string
+//   updatedAt: string
+// }
 
-type ApiResponse = {
-  response: ArticleType[];
-}
+// type ApiResponse = {
+//   response: ArticleType[];
+// }
 
 export default async function Home() {
 
