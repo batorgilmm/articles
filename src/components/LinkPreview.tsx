@@ -55,7 +55,7 @@ async function LinkPreview({ url }: { url: string }) {
                 textDecoration: "none",
             }}
         >
-            <div className="col-span-2 space-y-2">
+            <div className=" space-y-2 col-span-2">
                 <h3 className="text-sm md:text-xl font-bold line-clamp-2">
                     {data.title}
                 </h3>

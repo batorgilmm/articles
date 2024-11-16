@@ -14,14 +14,10 @@ type ApiResponse = {
 }
 
 export default async function Home() {
-
+  console.log(process.env.NEXT_PUBLIC_ORIGIN_URL);
   const data = await fetch(`${process.env.NEXT_PUBLIC_ORIGIN_URL}/api/article`)
-
-  console.log(data)
-
   const { response: articles } = (await data.json()) as ApiResponse
 
-  console.log(articles)
   return (
     <div className="min-h-screen sm:p-20">
       <div className="max-w-[616px] mx-auto">
@@ -29,7 +25,7 @@ export default async function Home() {
           Articles
         </h1>
 
-        <div className=" h-full mt-10 relative flex justify-center">
+        <div className=" h-full mt-10 relative space-y-4">
           {articles.map((article) => (
             <LinkPreview key={article._id} url={article.url} />
           ))}
