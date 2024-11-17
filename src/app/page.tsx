@@ -1,12 +1,25 @@
 import fetch from 'node-fetch';
 import LinkPreview from "@/components/LinkPreview";
 import { ApiResponse, ArticleType, GroupedArticleType } from '@/lib/types';
+import { headers } from 'next/headers';
 
 export default async function Home() {
-  const data = await fetch(`${process.env.NEXT_PUBLIC_ORIGIN_URL}/api/article/get-group-by-date`)
-  const { response } = (await data.json()) as ApiResponse<keyof GroupedArticleType>
+  const headersList = headers();
+  const fullUrl = (await headersList).get('referer');
 
-  const articles = Object.entries(response)
+  const data = await fetch(`${fullUrl}/api/article`)
+  const { response: articles } = (await data.json()) as ApiResponse<ArticleType[]>
+
+  const groupedArticles = articles.reduce<Map<string, ArticleType[]>>((acc, article) => {
+    const createdDate = `${new Date(article.createdAt).getFullYear()}-${new Date(article.createdAt).getMonth()}`;
+    if (!acc.has(createdDate)) {
+      acc.set(createdDate, []);
+    }
+    acc.get(createdDate)!.push(article);
+    return acc;
+  }, new Map());
+
+  const articlesGroupByDate: GroupedArticleType[] = Array.from(groupedArticles.entries());
 
   return (
     <div className="sm:pt-20">
@@ -16,12 +29,12 @@ export default async function Home() {
         </h1>
 
         <div className=" h-full">
-          {articles.map(([date, article]) => (
+          {articlesGroupByDate.map(([date, articles]) => (
             <div key={date}>
               <h6 className='text-[#80673D] text-sm md:text-xl font-light mt-10 font-mono'>{date}</h6>
               <div className='mt-4 relative space-y-4'>
                 {
-                  article.map((a: ArticleType) => <LinkPreview key={a._id} url={a.url} />)
+                  articles.map((article: ArticleType) => <LinkPreview key={article._id} url={article.url} />)
                 }
               </div>
             </div>

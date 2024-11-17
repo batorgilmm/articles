@@ -9,4 +9,4 @@ export type ApiResponse<T> = {
     response: T;
 }
 
-export type GroupedArticleType = [string, ArticleType];
+export type GroupedArticleType = [string, ArticleType[]];
