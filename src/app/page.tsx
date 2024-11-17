@@ -5,9 +5,13 @@ import { headers } from 'next/headers';
 
 export default async function Home() {
   const headersList = headers();
-  const fullUrl = (await headersList).get('referer');
+  const referer = (await headersList).get('referer');
 
-  const data = await fetch(`${fullUrl}/api/article`)
+  if (!referer) {
+    throw new Error("Referer header is missing");
+  }
+
+  const data = await fetch(`${referer}/api/article`)
   const { response: articles } = (await data.json()) as ApiResponse<ArticleType[]>
 
   const groupedArticles = articles.reduce<Map<string, ArticleType[]>>((acc, article) => {
