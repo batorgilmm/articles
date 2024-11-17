@@ -2,6 +2,10 @@ import { dbConnect, dbDisconnect } from "@/lib/database";
 import { Article } from "@/models/Article";
 import { NextResponse } from "next/server";
 
+export const config = {
+  runtime: 'edge',
+};
+
 export async function GET() {
   await dbConnect();
   const response = await Article.find();
@@ -23,4 +27,5 @@ export async function GET() {
   console.log(result)
 
   return NextResponse.json({ response: result });
+  // return NextResponse.json({ response });
 }
