@@ -3,7 +3,7 @@ import { dbConnect, dbDisconnect } from "@/lib/database";
 import { Article } from "@/models/Article";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest, _: unknown) {
   try {
     const body = await req.json();
     await dbConnect();
