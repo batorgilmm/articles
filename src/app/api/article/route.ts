@@ -8,9 +8,6 @@ export async function GET() {
   await dbConnect();
   const response = await Article.find();
   await dbDisconnect();
-
-  console.log({ response });
-  
   return NextResponse.json({ response });
 }
 
@@ -18,9 +15,7 @@ export async function POST(req: NextRequest, _: unknown) {
   await dbConnect();
   const body = await req.json();
   const response = await Article.create(body);
+
   await dbDisconnect();
-
-  console.log(response);
-
   return NextResponse.json({ response });
 }
