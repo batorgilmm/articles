@@ -12,6 +12,6 @@ export async function POST(req: NextRequest, _: unknown) {
     return NextResponse.json({ success: true, response });
   } catch (error) {
     console.log(error);
-    throw new Error("Failed to Delete Invoice");
+    throw new Error("Failed to insert articles");
   }
 }
