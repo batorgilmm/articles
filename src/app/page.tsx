@@ -4,12 +4,8 @@ import { ApiResponse, ArticleType, GroupedArticleType } from '@/lib/types';
 import { headers } from 'next/headers';
 
 export default async function Home() {
-  const headersList = headers();
-  const referer = (await headersList).get('referer');
-
-  if (!referer) {
-    throw new Error("Referer header is missing");
-  }
+  const headersList = await headers();
+  const referer = headersList.get('referer');
 
   const data = await fetch(`${referer}/api/article`)
   const { response: articles } = (await data.json()) as ApiResponse<ArticleType[]>
