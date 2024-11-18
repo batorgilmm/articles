@@ -8,7 +8,6 @@ export async function POST(req: NextRequest, _: unknown) {
     const body = await req.json();
     await dbConnect();
     const response = await Article.insertMany(body);
-    await dbDisconnect();
     return NextResponse.json({ success: true, response });
   } catch (error) {
     console.log(error);

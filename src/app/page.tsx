@@ -1,25 +1,19 @@
-import fetch from 'node-fetch';
+'use client';
 import LinkPreview from "@/components/LinkPreview";
-import { ApiResponse, ArticleType, GroupedArticleType } from '@/lib/types';
-import { headers } from 'next/headers';
+import { ArticleListSkeleton } from "@/components/skeletons/ArticleList";
+import { useGetArticles } from "@/lib/hooks/useGetArticles";
+import { useGetTags } from "@/lib/hooks/useGetTags";
+import { ArticleType } from '@/lib/types';
 
-export default async function Home() {
-  const headersList = await headers();
-  const referer = headersList.get('referer');
+export default function Home() {
+  const { articlesGroupByDate, loading } = useGetArticles();
+  const { tags, loading: tagLoading } = useGetTags();
 
-  const data = await fetch(`${referer}/api/article`)
-  const { response: articles } = (await data.json()) as ApiResponse<ArticleType[]>
+  console.log(tags, tagLoading)
 
-  const groupedArticles = articles.reduce<Map<string, ArticleType[]>>((acc, article) => {
-    const createdDate = `${new Date(article.createdAt).getFullYear()}-${new Date(article.createdAt).getMonth()}`;
-    if (!acc.has(createdDate)) {
-      acc.set(createdDate, []);
-    }
-    acc.get(createdDate)!.push(article);
-    return acc;
-  }, new Map());
-
-  const articlesGroupByDate: GroupedArticleType[] = Array.from(groupedArticles.entries());
+  if (loading) {
+    return <ArticleListSkeleton />
+  }
 
   return (
     <div className="sm:pt-20">
@@ -34,7 +28,7 @@ export default async function Home() {
               <h6 className='text-[#80673D] text-sm md:text-xl font-light mt-10 font-mono'>{date}</h6>
               <div className='mt-4 relative space-y-4'>
                 {
-                  articles.map((article: ArticleType) => <LinkPreview key={article._id} url={article.url} />)
+                  articles.map((article: ArticleType) => <LinkPreview key={article._id} article={article} />)
                 }
               </div>
             </div>

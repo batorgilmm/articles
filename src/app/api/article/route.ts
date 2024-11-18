@@ -2,6 +2,7 @@
 
 import { dbConnect, dbDisconnect } from "@/lib/database";
 import { Article } from "@/models/Article";
+import { Tag } from "@/models/Tag";
 import { NextRequest, NextResponse } from "next/server";
 
 export const config = {
@@ -10,8 +11,8 @@ export const config = {
 
 export async function GET() {
   await dbConnect();
-  const response = await Article.find();
-  await dbDisconnect();
+  const response = await Article.find().populate({ path: 'tags', model: Tag });
+  console.log(response)
   return NextResponse.json({ response });
 }
 
@@ -20,6 +21,5 @@ export async function POST(req: NextRequest, _: unknown) {
   const body = await req.json();
   const response = await Article.create(body);
 
-  await dbDisconnect();
   return NextResponse.json({ response });
 }
