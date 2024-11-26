@@ -5,6 +5,7 @@ const ArticleSchema = new Schema(
     title: String,
     description: String,
     image: String,
+    category: String,
     url: {
       type: String,
       unique: true

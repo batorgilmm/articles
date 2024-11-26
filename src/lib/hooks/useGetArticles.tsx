@@ -1,19 +1,19 @@
 import { useEffect, useMemo, useState } from "react"
 import { ApiResponse, ArticleType, GroupedArticleType } from "../types"
 
-export const useGetArticles = () => {
+export const useGetArticles = (filter: string) => {
     const [articles, setArticles] = useState<ArticleType[] | []>([])
     const [loading, setLoading] = useState(true)
 
     const getArticles = async () => {
-        const data = await fetch(`/api/article`)
+        const data = await fetch(`/api/article?filter=${filter}`)
         const { response } = (await data.json()) as ApiResponse<ArticleType[]>
         setArticles(response)
     }
 
     useEffect(() => {
         getArticles();
-    }, [])
+    }, [filter])
 
     const articlesGroupByDate = useMemo(() => {
         const groupedArticles = articles.reduce<Map<string, ArticleType[]>>((acc, article) => {
@@ -30,5 +30,5 @@ export const useGetArticles = () => {
         return result
     }, [articles])
 
-    return { articlesGroupByDate, loading }
+    return { articles, articlesGroupByDate, loading }
 }

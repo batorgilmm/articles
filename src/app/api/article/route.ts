@@ -9,10 +9,14 @@ export const config = {
   runtime: 'edge',
 };
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const filter = searchParams.get('filter');
+
+  console.log(filter)
+
   await dbConnect();
-  const response = await Article.find().populate({ path: 'tags', model: Tag });
-  console.log(response)
+  const response = await Article.find({ category: filter }).populate({ path: 'tags', model: Tag });
   return NextResponse.json({ response });
 }
 
