@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextRequest, NextResponse } from "next/server";
 import { JSDOM } from "jsdom"
-import { dbConnect, dbDisconnect } from "@/lib/database";
+import { dbConnect } from "@/lib/database";
 import { Article } from "@/models/Article";
 
 const extractMetaTags = async (url: string) => {

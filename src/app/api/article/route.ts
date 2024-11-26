@@ -13,8 +13,6 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const filter = searchParams.get('filter');
 
-  console.log(filter)
-
   await dbConnect();
   const response = await Article.find({ category: filter }).populate({ path: 'tags', model: Tag });
   return NextResponse.json({ response });

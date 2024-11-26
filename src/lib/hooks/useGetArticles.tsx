@@ -6,9 +6,11 @@ export const useGetArticles = (filter: string) => {
     const [loading, setLoading] = useState(true)
 
     const getArticles = async () => {
+        setLoading(true)
         const data = await fetch(`/api/article?filter=${filter}`)
         const { response } = (await data.json()) as ApiResponse<ArticleType[]>
         setArticles(response)
+        setLoading(false)
     }
 
     useEffect(() => {
@@ -26,7 +28,6 @@ export const useGetArticles = (filter: string) => {
         }, new Map());
 
         const result: GroupedArticleType[] = Array.from(groupedArticles.entries());
-        setLoading(false)
         return result
     }, [articles])
 
